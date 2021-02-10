@@ -14,6 +14,7 @@ import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
 import CreateInstruction from './components/instructions/CreateInstruction';
+import EditInstruction from './components/instructions/EditInstruction';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -36,12 +37,17 @@ const App = () => {
             <Route path='/signup' component={SignUp} />
             <PrivateRoute path='/dashboard' component={Dashboard} />
             <PrivateRoute
+              path='/newInstruction'
+              component={CreateInstruction}
+            />
+            <PrivateRoute
+              exact
               path='/instructions/:id'
               component={InstructionDetail}
             />
             <PrivateRoute
-              path='/newInstruction'
-              component={CreateInstruction}
+              path='/instructions/:id/edit'
+              component={EditInstruction}
             />
           </Switch>
         </Fragment>

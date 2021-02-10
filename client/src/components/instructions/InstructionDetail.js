@@ -5,23 +5,24 @@ import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import { deletePost } from '../../actions/post';
 
-const InstructionDetail = ({ user: { _id }, post, deletePost }) => {
+const InstructionDetail = ({ user, post, deletePost }) => {
   const onAuthor = () => {
-    if (_id && _id === post.user) {
+    if (user._id && user._id === post.user) {
       return <p>Posted by You</p>;
     } else {
       return <p>Posted by {post.name}</p>;
     }
   };
-  console.log(_id);
-  console.log(post.user);
 
   const onActionInstruction = () => {
-    if (_id && _id === post.user) {
+    if (user._id && user._id === post.user) {
       return (
         <div>
           <Link
-            to={'/instruction/' + post._id + '/edit'}
+            to={{
+              pathname: `/instructions/${post._id}/edit`,
+              post,
+            }}
             className='btn teal lighten-1 z-depth-0 mr-30'
           >
             Edit
@@ -60,7 +61,7 @@ const InstructionDetail = ({ user: { _id }, post, deletePost }) => {
           <span className='card-title teal-text center heading'>
             {post.title}
           </span>
-          <p className='mt-30'>{post.text}</p>
+          <p className='mt-30'>{post.content}</p>
         </div>
         <div className='card-action grey lighten-4 grey-text flex-row'>
           <Link to='/' className='btn teal lighten-1 z-depth-0'>
@@ -85,7 +86,7 @@ InstructionDetail.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   post: ownProps.location.post,
-  user: ownProps.location.user,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { deletePost })(InstructionDetail);

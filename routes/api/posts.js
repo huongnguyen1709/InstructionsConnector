@@ -120,6 +120,7 @@ router.put('/:id', auth, async (req, res) => {
     if (post.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
+    console.log(req.body);
 
     const updatePost = await post.set(req.body);
     updatePost.save();

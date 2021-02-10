@@ -7,6 +7,7 @@ import { getPosts } from '../../actions/post';
 import InstructionSummary from '../instructions/InstructionSummary';
 
 const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
+  console.log(user);
   useEffect(() => {
     getPosts();
   }, [getPosts]);
@@ -24,7 +25,6 @@ const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
                   to={{
                     pathname: `/instructions/${post._id}`,
                     post,
-                    user,
                   }}
                   key={post._id}
                 >

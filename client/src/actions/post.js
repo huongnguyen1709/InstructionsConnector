@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { ADD_POST, DELETE_POST, GET_POSTS, POST_ERROR } from './types';
+import {
+  ADD_POST,
+  DELETE_POST,
+  GET_POSTS,
+  POST_ERROR,
+  EDIT_POST,
+} from './types';
 
 // Get posts
 export const getPosts = () => async (dispatch) => {
@@ -55,6 +61,31 @@ export const addPost = (formData) => async (dispatch) => {
     });
 
     dispatch(setAlert('Post Created', 'success'));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Edit post
+export const editPost = (formData, id) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const res = await axios.put(`/api/posts/${id}`, formData, config);
+    console.log(res.data);
+    dispatch({
+      type: EDIT_POST,
+      payload: res.data,
+    });
+
+    dispatch(setAlert('Post Edited', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,
