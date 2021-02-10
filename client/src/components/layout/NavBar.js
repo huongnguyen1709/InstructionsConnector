@@ -21,7 +21,7 @@ const NavBar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <NavLink to='/signup'>Signup</NavLink>
       </li>
       <li>
-        <NavLink to='/signin'>Login</NavLink>
+        <NavLink to='/login'>Login</NavLink>
       </li>
     </ul>
   );
