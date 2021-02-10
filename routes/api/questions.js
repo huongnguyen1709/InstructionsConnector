@@ -6,16 +6,17 @@ const auth = require('../../middleware/auth');
 const Post = require('../../models/Post');
 const User = require('../../models/User');
 
-// @route   POST api/posts
-// @desc    Create a post
+// @route   POST api/questions
+// @desc    Create a question
 // @access  Private
 router.post(
   '/',
   [
     auth,
     [
-      check('content', 'Content is required').not().isEmpty(),
-      check('title', 'Title is required').not().isEmpty(),
+      check('question', 'Question is required').not().isEmpty(),
+      check('rightAnswer', 'Right Answer is required').not().isEmpty(),
+      check('answer2', 'Another answer is required').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -27,16 +28,17 @@ router.post(
     try {
       const user = await User.findById(req.user.id).select('-password');
 
-      const newPost = new Post({
-        title: req.body.title,
-        content: req.body.content,
-        name: user.name,
-        avatar: user.avatar,
+      const newQuestion = new Question({
+        question: req.body.question,
+        rightAnswer: req.body.rightAnswer,
+        answer2: req.body.answer2,
+        answer3: req.body.answer3,
+        answer4: req.body.answer4,
         user: req.user.id,
       });
 
-      const post = await newPost.save();
-      res.json(post);
+      const question = await newQuestion.save();
+      res.json(question);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -44,90 +46,90 @@ router.post(
   }
 );
 
-// @route   GET api/posts
-// @desc    Get all posts
+// @route   GET api/questions
+// @desc    Get all questions
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
-    res.json(posts);
+    const questions = await Post.find().sort({ date: -1 });
+    res.json(questions);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-// @route   GET api/posts/:id
-// @desc    Get post by ID
+// @route   GET api/questions/:id
+// @desc    Get question by ID
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const question = await Question.findById(req.params.id);
 
-    if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+    if (!question) {
+      return res.status(404).json({ msg: 'Question not found' });
     }
-    res.json(post);
+    res.json(question);
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ msg: 'Question not found' });
     }
     res.status(500).send('Server Error');
   }
 });
 
-// @route   DELETE api/posts/:id
-// @desc    Delete a post
+// @route   DELETE api/questions/:id
+// @desc    Delete a question
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const question = await Question.findById(req.params.id);
 
-    if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+    if (!question) {
+      return res.status(404).json({ msg: 'Question not found' });
     }
 
     // Check if user is the author
-    if (post.user.toString() !== req.user.id) {
+    if (question.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    await post.remove();
+    await question.remove();
 
     res.json({ msg: 'Post removed' });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ msg: 'Question not found' });
     }
     res.status(500).send('Server Error');
   }
 });
 
-// @route   EDIT api/posts/:id
-// @desc    Edit a post
+// @route   EDIT api/questions/:id
+// @desc    Edit a question
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const question = await Question.findById(req.params.id);
 
-    if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
+    if (!question) {
+      return res.status(404).json({ msg: 'Question not found' });
     }
 
     // Check if user is the author
-    if (post.user.toString() !== req.user.id) {
+    if (question.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    const updatePost = await post.set(req.body);
-    updatePost.save();
-    res.json(updatePost);
+    const updateQuestion = await question.set(req.body);
+    updateQuestion.save();
+    res.json(updateQuestion);
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Post not found' });
+      return res.status(404).json({ msg: 'Question not found' });
     }
     res.status(500).send('Server Error');
   }
