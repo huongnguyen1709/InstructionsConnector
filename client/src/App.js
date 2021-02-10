@@ -7,11 +7,13 @@ import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import Landing from './components/landing/Landing';
 import PrivateRoute from './components/routing/PrivateRoute';
+import InstructionDetail from './components/instructions/InstructionDetail';
 // Redux
 import { Provider } from 'react-redux';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
+import CreateInstruction from './components/instructions/CreateInstruction';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -33,6 +35,14 @@ const App = () => {
             <Route path='/login' component={SignIn} />
             <Route path='/signup' component={SignUp} />
             <PrivateRoute path='/dashboard' component={Dashboard} />
+            <PrivateRoute
+              path='/instructions/:id'
+              component={InstructionDetail}
+            />
+            <PrivateRoute
+              path='/newInstruction'
+              component={CreateInstruction}
+            />
           </Switch>
         </Fragment>
       </Router>

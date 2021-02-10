@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { getPosts } from '../../actions/post';
-import InstructionSummary from './InstructionSummary';
+import InstructionSummary from '../instructions/InstructionSummary';
 
 const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
   useEffect(() => {
@@ -20,7 +20,14 @@ const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
           <div className='section'>
             {posts.map((post) => {
               return (
-                <Link to={'/instruction/' + post.id} key={post.id}>
+                <Link
+                  to={{
+                    pathname: `/instructions/${post._id}`,
+                    post,
+                    user,
+                  }}
+                  key={post._id}
+                >
                   <InstructionSummary user={user} instruction={post} />
                 </Link>
               );

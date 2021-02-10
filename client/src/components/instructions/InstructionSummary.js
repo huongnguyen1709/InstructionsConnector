@@ -7,7 +7,7 @@ const InstructionSummary = ({ user: { _id }, instruction }) => {
     if (_id && _id === instruction.user) {
       return <p>Posted by You</p>;
     } else {
-      return <div>Posted by {instruction.name}</div>;
+      return <p>Posted by {instruction.name}</p>;
     }
   };
 
