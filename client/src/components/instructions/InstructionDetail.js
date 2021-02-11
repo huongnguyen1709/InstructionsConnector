@@ -5,7 +5,7 @@ import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import { deletePost } from '../../actions/post';
 
-const InstructionDetail = ({ user, post, deletePost }) => {
+const InstructionDetail = ({ user, post, deletePost, history }) => {
   const onAuthor = () => {
     if (user._id && user._id === post.user) {
       return <p>Posted by You</p>;
@@ -19,6 +19,12 @@ const InstructionDetail = ({ user, post, deletePost }) => {
       return (
         <div>
           <Link
+            to={'/instructions/' + post._id + '/newQuestion'}
+            className='btn teal lighten-1 z-depth-0 mr-30'
+          >
+            Add Question
+          </Link>
+          <Link
             to={{
               pathname: `/instructions/${post._id}/edit`,
               post,
@@ -27,29 +33,16 @@ const InstructionDetail = ({ user, post, deletePost }) => {
           >
             Edit
           </Link>
-          <Link
-            to={'/instruction/' + post._id + '/newQuestion'}
-            className='btn teal lighten-1 z-depth-0 mr-30'
-          >
-            Add Question
-          </Link>
-
           <button
-            onClick={(e) => deletePost(post._id)}
+            onClick={(e) => {
+              deletePost(post._id);
+              history.push('/');
+            }}
             className='btn teal lighten-1 z-depth-0'
           >
             Delete
           </button>
         </div>
-      );
-    } else {
-      return (
-        <Link
-          to={'/instruction/' + post._id + '/question'}
-          className='btn teal lighten-1 z-depth-0 mr-30'
-        >
-          See Question
-        </Link>
       );
     }
   };
@@ -71,6 +64,12 @@ const InstructionDetail = ({ user, post, deletePost }) => {
             {onAuthor()}
             <div>{post.date}</div>
           </span>
+          <Link
+            to={'/instructions/' + post._id + '/questions'}
+            className='btn teal lighten-1 z-depth-0 mr-30'
+          >
+            See Question
+          </Link>
           {onActionInstruction()}
         </div>
       </div>

@@ -3,8 +3,9 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
-const Post = require('../../models/Post');
+const Question = require('../../models/Question');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route   POST api/questions
 // @desc    Create a question
@@ -34,6 +35,7 @@ router.post(
         answer2: req.body.answer2,
         answer3: req.body.answer3,
         answer4: req.body.answer4,
+        postId: req.body.postId,
         user: req.user.id,
       });
 

@@ -7,7 +7,6 @@ import { getPosts } from '../../actions/post';
 import InstructionSummary from '../instructions/InstructionSummary';
 
 const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
-  console.log(user);
   useEffect(() => {
     getPosts();
   }, [getPosts]);
