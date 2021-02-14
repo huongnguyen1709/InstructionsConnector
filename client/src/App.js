@@ -16,6 +16,7 @@ import { loadUser } from './actions/auth';
 import CreateInstruction from './components/instructions/CreateInstruction';
 import EditInstruction from './components/instructions/EditInstruction';
 import AddQuestion from './components/questions/AddQuestion';
+import QuestionList from './components/questions/QuestionList';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -53,6 +54,10 @@ const App = () => {
             <PrivateRoute
               path='/instructions/:id/newQuestion'
               component={AddQuestion}
+            />
+            <PrivateRoute
+              path='/instructions/:id/questions'
+              component={QuestionList}
             />
           </Switch>
         </Fragment>

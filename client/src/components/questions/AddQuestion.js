@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { addQuestion } from '../../actions/question';
 import { Link } from 'react-router-dom';
 
-const AddQuestion = ({ addQuestion, history, postId }) => {
+const AddQuestion = ({ addQuestion, history, instructionId }) => {
   const [formData, setFormData] = useState({
     question: '',
     rightAnswer: '',
@@ -13,7 +13,7 @@ const AddQuestion = ({ addQuestion, history, postId }) => {
     answer4: '',
   });
 
-  console.log(postId);
+  console.log(instructionId);
   const { question, rightAnswer, answer2, answer3, answer4 } = formData;
 
   const onChange = (e) =>
@@ -23,7 +23,7 @@ const AddQuestion = ({ addQuestion, history, postId }) => {
     e.preventDefault();
     const newQuestion = {
       ...formData,
-      postId: postId,
+      instructionId: instructionId,
     };
     addQuestion(newQuestion);
     setFormData({
@@ -97,7 +97,10 @@ const AddQuestion = ({ addQuestion, history, postId }) => {
         </div>
 
         <div className='flex-row'>
-          <Link to='/' className='btn teal lighten-1 z-depth-0'>
+          <Link
+            to={`/instructions/${instructionId}`}
+            className='btn teal lighten-1 z-depth-0'
+          >
             Cancel
           </Link>
           <button className='btn teal lighten-1 z-depth-0'>Add</button>
@@ -109,10 +112,10 @@ const AddQuestion = ({ addQuestion, history, postId }) => {
 
 AddQuestion.propTypes = {
   addQuestion: PropTypes.func.isRequired,
-  postId: PropTypes.string,
+  instructionId: PropTypes.string,
 };
 const mapStateToProps = (state, ownProps) => ({
-  postId: ownProps.match.params.id,
+  instructionId: ownProps.match.params.id,
 });
 
 export default connect(mapStateToProps, { addQuestion })(AddQuestion);

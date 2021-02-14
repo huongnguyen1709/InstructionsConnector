@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
-import { deletePost } from '../../actions/post';
+import { deletePost, getPostByID } from '../../actions/post';
 
-const InstructionDetail = ({ user, post, deletePost, history }) => {
+const InstructionDetail = ({
+  user,
+  post: { post, loadingById },
+  deletePost,
+  getPostByID,
+  history,
+  postId,
+}) => {
+  useEffect(() => {
+    getPostByID(postId);
+  }, [getPostByID]);
+
   const onAuthor = () => {
     if (user._id && user._id === post.user) {
       return <p>Posted by You</p>;
@@ -47,7 +58,9 @@ const InstructionDetail = ({ user, post, deletePost, history }) => {
     }
   };
 
-  return (
+  return loadingById ? (
+    <Spinner />
+  ) : (
     <div className='container section'>
       <div className='card z-depth-0'>
         <div className='card-content flex-column'>
@@ -81,11 +94,18 @@ InstructionDetail.propTypes = {
   post: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   deletePost: PropTypes.func.isRequired,
+  getPostByID: PropTypes.func.isRequired,
+  postId: PropTypes.string,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  post: ownProps.location.post,
-  user: state.auth.user,
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    postId: ownProps.match.params.id,
+    post: state.post,
+    user: state.auth.user,
+  };
+};
 
-export default connect(mapStateToProps, { deletePost })(InstructionDetail);
+export default connect(mapStateToProps, { deletePost, getPostByID })(
+  InstructionDetail
+);

@@ -20,13 +20,7 @@ const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
           <div className='section'>
             {posts.map((post) => {
               return (
-                <Link
-                  to={{
-                    pathname: `/instructions/${post._id}`,
-                    post,
-                  }}
-                  key={post._id}
-                >
+                <Link to={`/instructions/${post._id}`} key={post._id}>
                   <InstructionSummary user={user} instruction={post} />
                 </Link>
               );

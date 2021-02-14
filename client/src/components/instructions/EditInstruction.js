@@ -5,7 +5,7 @@ import { addPost } from '../../actions/post';
 import { Link } from 'react-router-dom';
 import { editPost } from '../../actions/post';
 
-const EditInstruction = ({ post, editPost, history }) => {
+const EditInstruction = ({ post, editPost, history, instructionId }) => {
   const [formData, setFormData] = useState({
     title: post.title,
     content: post.content,
@@ -58,7 +58,10 @@ const EditInstruction = ({ post, editPost, history }) => {
         </div>
 
         <div className='flex-row'>
-          <Link to='/' className='btn teal lighten-1 z-depth-0'>
+          <Link
+            to={`/instructions/${instructionId}`}
+            className='btn teal lighten-1 z-depth-0'
+          >
             Cancel
           </Link>
           <button className='btn teal lighten-1 z-depth-0'>Save</button>
@@ -74,6 +77,7 @@ EditInstruction.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   post: ownProps.location.post,
+  instructionId: ownProps.match.params.id,
 });
 
 export default connect(mapStateToProps, { editPost })(EditInstruction);

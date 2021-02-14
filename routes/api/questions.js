@@ -53,7 +53,7 @@ router.post(
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const questions = await Post.find().sort({ date: -1 });
+    const questions = await Question.find().sort({ date: -1 });
     res.json(questions);
   } catch (err) {
     console.error(err.message);

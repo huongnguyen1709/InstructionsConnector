@@ -4,12 +4,14 @@ import {
   DELETE_POST,
   ADD_POST,
   EDIT_POST,
+  GET_POST_BY_ID,
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   post: null,
   loading: true,
+  loadingById: true,
   error: {},
 };
 
@@ -22,6 +24,14 @@ export default function (state = initialState, action) {
         ...state,
         posts: payload,
         loading: false,
+      };
+    case GET_POST_BY_ID:
+      console.log(payload);
+      return {
+        ...state,
+        post: payload,
+        loading: false,
+        loadingById: false,
       };
     case ADD_POST:
       return {
