@@ -2,6 +2,7 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import {
   GET_QUESTIONS,
+  GET_QUESTION_BY_ID,
   QUESTION_ERROR,
   DELETE_QUESTION,
   ADD_QUESTION,

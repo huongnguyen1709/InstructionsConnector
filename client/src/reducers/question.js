@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   questions: [],
+  question: null,
   loading: true,
   error: {},
 };

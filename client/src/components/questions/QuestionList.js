@@ -36,13 +36,10 @@ const QuestionList = ({
         if (question) {
           return (
             <Link
-              to={
-                '/instructions/' +
-                questions.postId +
-                '/questions/' +
-                question._id +
-                '/edit'
-              }
+              to={{
+                pathname: `/instructions/${question.postId}/questions/${question._id}/edit`,
+                question,
+              }}
               key={question._id}
             >
               <div className='card mt-60'>
