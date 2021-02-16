@@ -12,13 +12,14 @@ const InstructionDetail = ({
   getPostByID,
   history,
   postId,
+  isAuthenticated,
 }) => {
   useEffect(() => {
     getPostByID(postId);
   }, [getPostByID]);
 
   const onAuthor = () => {
-    if (user._id && user._id === post.user) {
+    if (isAuthenticated && user._id && user._id === post.user) {
       return <p>Posted by You</p>;
     } else {
       return <p>Posted by {post.name}</p>;
@@ -26,7 +27,7 @@ const InstructionDetail = ({
   };
 
   const onActionInstruction = () => {
-    if (user._id && user._id === post.user) {
+    if (isAuthenticated && user._id && user._id === post.user) {
       return (
         <div>
           <Link
@@ -77,12 +78,14 @@ const InstructionDetail = ({
             {onAuthor()}
             <div>{post.date}</div>
           </span>
-          <Link
-            to={'/instructions/' + post._id + '/questions'}
-            className='btn teal lighten-1 z-depth-0 mr-30'
-          >
-            See Question
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              to={'/instructions/' + post._id + '/questions'}
+              className='btn teal lighten-1 z-depth-0 mr-30'
+            >
+              See Question
+            </Link>
+          ) : null}
           {onActionInstruction()}
         </div>
       </div>
@@ -96,6 +99,7 @@ InstructionDetail.propTypes = {
   deletePost: PropTypes.func.isRequired,
   getPostByID: PropTypes.func.isRequired,
   postId: PropTypes.string,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -103,6 +107,7 @@ const mapStateToProps = (state, ownProps) => {
     postId: ownProps.match.params.id,
     post: state.post,
     user: state.auth.user,
+    isAuthenticated: state.auth.isAuthenticated,
   };
 };
 

@@ -6,7 +6,12 @@ import Spinner from '../layout/Spinner';
 import { getPosts } from '../../actions/post';
 import InstructionSummary from '../instructions/InstructionSummary';
 
-const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
+const Dashboard = ({
+  getPosts,
+  user,
+  post: { posts, loading },
+  isAuthenticated,
+}) => {
   useEffect(() => {
     getPosts();
   }, [getPosts]);
@@ -21,7 +26,11 @@ const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
             {posts.map((post) => {
               return (
                 <Link to={`/instructions/${post._id}`} key={post._id}>
-                  <InstructionSummary user={user} instruction={post} />
+                  <InstructionSummary
+                    isAuthenticated={isAuthenticated}
+                    user={user}
+                    instruction={post}
+                  />
                 </Link>
               );
             })}
@@ -33,12 +42,14 @@ const Dashboard = ({ getPosts, user, post: { posts, loading } }) => {
 };
 
 Dashboard.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
   getPosts: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
   post: state.post,
   user: state.auth.user,
 });

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-const InstructionSummary = ({ user: { _id }, instruction }) => {
+const InstructionSummary = ({ user, instruction, isAuthenticated }) => {
   const onAuthor = () => {
-    if (_id && _id === instruction.user) {
+    if (isAuthenticated && user._id && user._id === instruction.user) {
       return <p>Posted by You</p>;
     } else {
       return <p>Posted by {instruction.name}</p>;
@@ -26,7 +26,8 @@ const InstructionSummary = ({ user: { _id }, instruction }) => {
 };
 
 InstructionSummary.propTypes = {
-  user: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
+  user: PropTypes.object,
   instruction: PropTypes.object.isRequired,
 };
 
