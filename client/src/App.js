@@ -6,7 +6,6 @@ import SignUp from './components/auth/SignUp';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import Landing from './components/landing/Landing';
-import Huong from './components/landing/Huong';
 import PrivateRoute from './components/routing/PrivateRoute';
 import InstructionDetail from './components/instructions/InstructionDetail';
 // Redux
@@ -34,7 +33,7 @@ const App = () => {
       <Router>
         <Fragment>
           <NavBar />
-          <Route exact path='/' component={Huong} />
+          <Route exact path='/' component={Landing} />
           <Alert />
           <Switch>
             <Route path='/login' component={SignIn} />

@@ -1,18 +1,19 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { disconnect } from 'mongoose';
 import QuestionDetail from './QuestionDetail';
-import e from 'express';
 
-const QuestionPopup = ({ instruction, questions, onCloseQuestion }) => {
+const QuestionPopup = ({
+  instruction,
+  questions,
+  onCloseQuestion,
+  onUserAnswer,
+}) => {
   const [data, setData] = useState({
-    questionLoaded: [questions[0]],
     index: 0,
     answer: false,
   });
 
-  const { questionLoaded, index, answer } = data;
-  console.log(questionLoaded);
+  const { index, answer } = data;
 
   const onAnswer = (userAnswer) => {
     setData({
@@ -20,24 +21,30 @@ const QuestionPopup = ({ instruction, questions, onCloseQuestion }) => {
       answer: userAnswer,
     });
   };
+  console.log(answer);
 
-  const onHandleSubmit = () => {
+  const onHandleSubmit = (e) => {
     e.preventDefault();
+    onUserAnswer(answer);
+    if (answer === true && index < questions.length - 1) {
+      setData({
+        ...data,
+        index: index + 1,
+      });
+    } else {
+      onCloseQuestion();
+    }
   };
 
   return (
     <Fragment>
       <div className='section'>
         <form onSubmit={onHandleSubmit}>
-          {questions &&
-            questions.map((question) => (
-              <QuestionDetail
-                key={question._id}
-                question={question}
-                instruction={instruction}
-                onAnswer={(answer) => onAnswer(answer)}
-              />
-            ))}
+          <QuestionDetail
+            question={questions[index]}
+            instruction={instruction}
+            onAnswer={(answer) => onAnswer(answer)}
+          />
           <div className='flex-row'>
             <button
               onClick={onCloseQuestion}

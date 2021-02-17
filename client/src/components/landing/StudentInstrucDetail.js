@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const StudentInstrucDetail = ({ instruction, onCloseDetail }) => {
+  console.log('student instruc detail');
   return (
     <div className='section'>
       <div className='card z-depth-0'>

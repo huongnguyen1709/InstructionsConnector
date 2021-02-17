@@ -9,6 +9,7 @@ import { getQuestions } from '../../actions/question';
 import InstructionSummary from '../instructions/InstructionSummary';
 import QuestionPopup from './QuestionPopup';
 import StudentInstrucDetail from './StudentInstrucDetail';
+import { set } from 'mongoose';
 
 const Landing = ({
   isAuthenticated,
@@ -27,14 +28,17 @@ const Landing = ({
     instructions: [],
     instruction: null,
     disabled: false,
+    quesDisabled: true,
     showQuestion: false,
     showDetail: false,
     questionPopup: [],
     currentInstruction: null,
+    answer: false,
   });
 
   const {
     disabled,
+    quesDisabled,
     index,
     instructions,
     showQuestion,
@@ -42,61 +46,75 @@ const Landing = ({
     instruction,
     questionPopup,
     currentInstruction,
+    answer,
   } = data;
 
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
 
+  const onSeeInstruction = (index, newInstruction) => {
+    console.log('seeIntructions');
+    console.log(posts[index]);
+    setData({
+      instructions: [...instructions, posts[index]],
+      currentInstruction: newInstruction,
+    });
+  };
+
   const onMoveToNextIns = () => {
-    const currentInstruction = posts[index];
+    const newInstruction = posts[index];
+
     const questionPopup =
       questions &&
-      questions.filter(
-        (question) => question.postId === currentInstruction._id
-      );
-    console.log(questionPopup);
-    if (questionPopup.length > 0) {
-      console.log('there is a question will be popup in next intruction');
+      questions.filter((question) => question.postId === posts[index]._id);
+    if (newInstruction) {
+      console.log('co newIntruction');
+      setData({
+        ...data,
+        instructions: [...instructions, newInstruction],
+        currentInstruction: newInstruction,
+      });
     }
-
-    setData({
-      ...data,
-      index: index + 1,
-      instructions: [...instructions, posts[index]],
-      questionPopup: questionPopup,
-      currentInstruction: currentInstruction,
-    });
+    if (questionPopup.length > 0) {
+      setData({
+        ...data,
+        quesDisabled: false,
+        disabled: true,
+        questionPopup: questionPopup,
+      });
+      if (answer === true) {
+        setData({
+          ...data,
+          index: index + 1,
+          quesDisabled: true,
+          disabled: false,
+        });
+      }
+    } else if (index === posts.length - 1) {
+      setData({
+        ...data,
+        index: 0,
+        disabled: true,
+      });
+    } else {
+      setData({
+        ...data,
+        index: index + 1,
+      });
+    }
   };
 
-  const onShowQuestion = () => {
-    setData({ ...data, showQuestion: true });
-  };
-
-  const onCloseDetail = () => {
-    setData({
-      ...data,
-      showDetail: false,
-    });
-  };
-
-  const onCloseQuestion = () => {
-    setData({
-      ...data,
-      showQuestion: false,
-    });
-  };
-
-  console.log(showQuestion);
-  console.log(index);
-  console.log(instructions);
-  console.log(questionPopup);
+  console.log('index', index);
+  console.log('questionPopup', questionPopup);
+  console.log('instructions', instructions);
+  console.log('current Intruction', currentInstruction);
 
   return loading ? (
     <Spinner />
   ) : posts ? (
     <Fragment>
-      <div className={showDetail ? 'container relative' : 'container'}>
+      <div className='container'>
         <div className={showDetail || showQuestion ? 'row invisible' : 'row'}>
           <div className='col s12 m6 offset-m2'>
             <div className='section'>
@@ -130,13 +148,36 @@ const Landing = ({
             </button>
 
             <button
-              onClick={onShowQuestion}
+              disabled={quesDisabled}
+              onClick={(e) => setData({ ...data, showQuestion: true })}
               className='btn waves-effect waves-light flex-row mt-30'
             >
               Question PopUp
             </button>
           </div>
         </div>
+      </div>
+
+      <div className={showDetail ? 'popup' : null}>
+        {showDetail ? (
+          <StudentInstrucDetail
+            instruction={instruction}
+            onCloseDetail={(e) => setData({ ...data, showDetail: false })}
+          />
+        ) : null}
+      </div>
+
+      <div className={showQuestion ? 'popup' : null}>
+        {showQuestion ? (
+          <QuestionPopup
+            instruction={currentInstruction}
+            questions={questionPopup}
+            onCloseQuestion={(e) => setData({ ...data, showQuestion: false })}
+            onUserAnswer={(userAnswer) =>
+              setData({ ...data, answer: userAnswer })
+            }
+          />
+        ) : null}
       </div>
     </Fragment>
   ) : (
