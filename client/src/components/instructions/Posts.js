@@ -9,39 +9,41 @@ Posts.propTypes = {};
 
 export default Posts;
 
-if (questionPopup.length == 0) {
-  console.log('huong');
-  return setData({
+const questionPopup =
+  questions &&
+  questions.filter((question) => question.postId === posts[index]._id);
+if (newInstruction) {
+  console.log('co newIntruction');
+  setData({
     ...data,
-    index: index + 1,
-  });
-}
-console.log(questionPopup.length);
-console.log(questionPopup);
-console.log(index);
-if (questionPopup.length > 0 && answer === true) {
-  console.log('vo duoc');
-  console.log(questionPopup.length);
-  return setData({
-    ...data,
-    index: index + 1,
-    instructions: [...instructions, posts[index]],
-    currentInstruction: currentInstruction,
-    questionPopup: questionPopup,
+    instructions: [...instructions, newInstruction],
+    currentInstruction: newInstruction,
   });
 }
 if (questionPopup.length > 0) {
-  console.log(' there is a question');
-  return setData({
+  setData({
     ...data,
     quesDisabled: false,
+    disabled: true,
+    questionPopup: questionPopup,
   });
-}
-
-if (index === posts.length - 1) {
+  if (answer === true) {
+    setData({
+      ...data,
+      index: index + 1,
+      quesDisabled: true,
+      disabled: false,
+    });
+  }
+} else if (index === posts.length - 1) {
   setData({
     ...data,
     index: 0,
     disabled: true,
+  });
+} else {
+  setData({
+    ...data,
+    index: index + 1,
   });
 }

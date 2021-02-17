@@ -2,6 +2,7 @@ import React, { useEffect, Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { withAlert } from 'react-alert';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { getPosts } from '../../actions/post';
@@ -9,7 +10,8 @@ import { getQuestions } from '../../actions/question';
 import InstructionSummary from '../instructions/InstructionSummary';
 import QuestionPopup from './QuestionPopup';
 import StudentInstrucDetail from './StudentInstrucDetail';
-import { set } from 'mongoose';
+import { setAlert } from '../../actions/alert';
+import { compose } from 'redux';
 
 const Landing = ({
   isAuthenticated,
@@ -17,6 +19,7 @@ const Landing = ({
   post: { posts, loading },
   getQuestions,
   questions,
+  alert,
 }) => {
   const [data, setData] = useState({
     index: 0,
@@ -28,7 +31,7 @@ const Landing = ({
     showDetail: false,
     questionPopup: [],
     currentInstruction: null,
-    answer: false,
+    answer: true,
   });
 
   const {
@@ -49,70 +52,57 @@ const Landing = ({
     getQuestions();
   }, [getPosts, getQuestions]);
 
-  useEffect(() => {
-    console.log('nếu instructions có thay đổi', instructions);
-  }, [instructions]);
-
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
 
-  const onSeeInstruction = (index, newInstruction) => {
-    console.log('seeIntructions');
-    console.log(posts[index]);
-    setData({
-      instructions: [...instructions, posts[index]],
-      currentInstruction: newInstruction,
-    });
-  };
-
   const onMoveToNextIns = () => {
     const newInstruction = posts[index];
-
-    const questionPopup =
-      questions &&
-      questions.filter((question) => question.postId === posts[index]._id);
-    if (newInstruction) {
-      console.log('co newIntruction');
-      setData({
-        ...data,
-        instructions: [...instructions, newInstruction],
-        currentInstruction: newInstruction,
-      });
-    }
-    if (questionPopup.length > 0) {
-      setData({
-        ...data,
-        quesDisabled: false,
-        disabled: true,
-        questionPopup: questionPopup,
-      });
-      if (answer === true) {
+    if (answer === true && newInstruction) {
+      if (index === posts.length - 1) {
         setData({
           ...data,
-          index: index + 1,
-          quesDisabled: true,
-          disabled: false,
+          index: 0,
+          disabled: true,
         });
       }
-    } else if (index === posts.length - 1) {
-      setData({
+
+      const questionPopup =
+        questions &&
+        questions.filter((question) => question.postId === newInstruction._id);
+
+      if (questionPopup && questionPopup.length > 0) {
+        console.log('hello');
+        return setData({
+          ...data,
+          answer: false,
+          quesDisabled: false,
+          questionPopup: questionPopup,
+          currentInstruction: newInstruction,
+          instructions: [...instructions, newInstruction],
+          index: index + 1,
+        });
+      }
+
+      return setData({
         ...data,
-        index: 0,
+        instructions: [...instructions, newInstruction],
+        index: index + 1,
+        quesDisabled: true,
+        questionPopup: null,
+      });
+    } else if (!newInstruction) {
+      return setData({
+        ...data,
         disabled: true,
       });
     } else {
-      setData({
-        ...data,
-        index: index + 1,
-      });
+      console.log('you need to answer first');
+      alert.show('You need to pass all the questions');
     }
   };
 
-  console.log('index', index);
-  console.log('questionPopup', questionPopup);
-  console.log('instructions', instructions);
-  console.log('current Intruction', currentInstruction);
+  console.log(disabled);
 
   return loading ? (
     <Spinner />
@@ -144,6 +134,7 @@ const Landing = ({
 
             {/* Button to show Next Instruction Summary */}
             <button
+              disabled={disabled}
               onClick={onMoveToNextIns}
               className='btn waves-effect waves-light flex-row'
             >
@@ -177,6 +168,9 @@ const Landing = ({
             instruction={currentInstruction}
             questions={questionPopup}
             onCloseQuestion={(e) => setData({ ...data, showQuestion: false })}
+            onCancelQuestion={(e) =>
+              setData({ ...data, showQuestion: false, answer: false })
+            }
             onUserAnswer={(userAnswer) =>
               setData({ ...data, answer: userAnswer })
             }
@@ -201,4 +195,7 @@ const mapStateToProps = (state) => ({
   questions: state.question.questions,
 });
 
-export default connect(mapStateToProps, { getPosts, getQuestions })(Landing);
+export default compose(
+  withAlert(),
+  connect(mapStateToProps, { getPosts, getQuestions })
+)(Landing);

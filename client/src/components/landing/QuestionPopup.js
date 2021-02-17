@@ -6,6 +6,7 @@ const QuestionPopup = ({
   instruction,
   questions,
   onCloseQuestion,
+  onCancelQuestion,
   onUserAnswer,
 }) => {
   const [data, setData] = useState({
@@ -21,7 +22,6 @@ const QuestionPopup = ({
       answer: userAnswer,
     });
   };
-  console.log(answer);
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
@@ -31,8 +31,10 @@ const QuestionPopup = ({
         ...data,
         index: index + 1,
       });
-    } else {
+    } else if (answer === true) {
       onCloseQuestion();
+    } else {
+      onCancelQuestion();
     }
   };
 
@@ -47,7 +49,7 @@ const QuestionPopup = ({
           />
           <div className='flex-row'>
             <button
-              onClick={onCloseQuestion}
+              onClick={onCancelQuestion}
               className='btn teal lighten-1 z-depth-0'
             >
               Cancel

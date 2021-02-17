@@ -6,8 +6,6 @@ const QuestionDetail = ({ question, instruction, onAnswer }) => {
     const selectedAnswer = e.target.value;
     const answer = selectedAnswer === question.rightAnswer ? true : false;
     onAnswer(answer);
-
-    console.log(answer);
   };
 
   return (
