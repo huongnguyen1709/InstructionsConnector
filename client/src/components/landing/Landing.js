@@ -18,11 +18,6 @@ const Landing = ({
   getQuestions,
   questions,
 }) => {
-  useEffect(() => {
-    getPosts();
-    getQuestions();
-  }, [getPosts, getQuestions]);
-
   const [data, setData] = useState({
     index: 0,
     instructions: [],
@@ -48,6 +43,15 @@ const Landing = ({
     currentInstruction,
     answer,
   } = data;
+
+  useEffect(() => {
+    getPosts();
+    getQuestions();
+  }, [getPosts, getQuestions]);
+
+  useEffect(() => {
+    console.log('nếu instructions có thay đổi', instructions);
+  }, [instructions]);
 
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
