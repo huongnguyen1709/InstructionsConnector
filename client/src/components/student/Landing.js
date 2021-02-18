@@ -1,5 +1,4 @@
 import React, { useEffect, Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withAlert } from 'react-alert';
@@ -10,7 +9,6 @@ import { getQuestions } from '../../actions/question';
 import InstructionSummary from '../instructions/InstructionSummary';
 import QuestionPopup from './QuestionPopup';
 import StudentInstrucDetail from './StudentInstrucDetail';
-import { setAlert } from '../../actions/alert';
 import { compose } from 'redux';
 
 const Landing = ({

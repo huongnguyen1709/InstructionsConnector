@@ -1,4 +1,4 @@
-import React, { createFactory } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const QuestionDetail = ({ question, instruction, onAnswer }) => {

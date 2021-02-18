@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ const QuestionList = ({
   useEffect(() => {
     getQuestions();
     getPostByID(instructionId);
-  }, [getQuestions, getPostByID]);
+  }, [getQuestions, getPostByID, instructionId]);
 
   console.log(questions);
 
