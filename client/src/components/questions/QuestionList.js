@@ -18,14 +18,11 @@ const QuestionList = ({
     getPostByID(instructionId);
   }, [getQuestions, getPostByID]);
 
-  console.log(instructionId);
   console.log(questions);
 
   questions =
     questions &&
     questions.filter((question) => {
-      console.log(question.postId);
-      console.log(instructionId);
       return question.postId === instructionId;
     });
   console.log(questions);

@@ -72,7 +72,6 @@ const Landing = ({
         questions.filter((question) => question.postId === newInstruction._id);
 
       if (questionPopup && questionPopup.length > 0) {
-        console.log('hello');
         return setData({
           ...data,
           answer: false,
@@ -101,8 +100,6 @@ const Landing = ({
       alert.show('You need to pass all the questions');
     }
   };
-
-  console.log(disabled);
 
   return loading ? (
     <Spinner />
@@ -167,12 +164,8 @@ const Landing = ({
           <QuestionPopup
             instruction={currentInstruction}
             questions={questionPopup}
-            onCloseQuestion={(e) => setData({ ...data, showQuestion: false })}
-            onCancelQuestion={(e) =>
-              setData({ ...data, showQuestion: false, answer: false })
-            }
-            onUserAnswer={(userAnswer) =>
-              setData({ ...data, answer: userAnswer })
+            onCloseQuestion={(e) =>
+              setData({ ...data, showQuestion: false, answer: e })
             }
           />
         ) : null}

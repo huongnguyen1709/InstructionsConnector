@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createFactory } from 'react';
 import PropTypes from 'prop-types';
 
 const QuestionDetail = ({ question, instruction, onAnswer }) => {
@@ -69,6 +69,10 @@ const QuestionDetail = ({ question, instruction, onAnswer }) => {
   );
 };
 
-QuestionDetail.propTypes = {};
+QuestionDetail.propTypes = {
+  question: PropTypes.object.isRequired,
+  instruction: PropTypes.object.isRequired,
+  onAnswer: PropTypes.func.isRequired,
+};
 
 export default QuestionDetail;

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { signup } from '../../actions/auth';
 import PropTypes from 'prop-types';
-import { sign } from 'jsonwebtoken';
 
 const SignUp = ({ setAlert, signup, isAuthenticated }) => {
   const [formData, setFormData] = useState({

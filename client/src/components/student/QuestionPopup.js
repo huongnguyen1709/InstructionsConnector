@@ -7,7 +7,6 @@ const QuestionPopup = ({
   questions,
   onCloseQuestion,
   onCancelQuestion,
-  onUserAnswer,
 }) => {
   const [data, setData] = useState({
     index: 0,
@@ -25,17 +24,13 @@ const QuestionPopup = ({
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    onUserAnswer(answer);
+
     if (answer === true && index < questions.length - 1) {
       setData({
         ...data,
         index: index + 1,
       });
-    } else if (answer === true) {
-      onCloseQuestion();
-    } else {
-      onCancelQuestion();
-    }
+    } else onCloseQuestion(answer);
   };
 
   return (
@@ -62,6 +57,11 @@ const QuestionPopup = ({
   );
 };
 
-QuestionPopup.propTypes = {};
+QuestionPopup.propTypes = {
+  instruction: PropTypes.object.isRequired,
+  questions: PropTypes.array.isRequired,
+  onCloseQuestion: PropTypes.func.isRequired,
+  onCancelQuestion: PropTypes.func,
+};
 
 export default QuestionPopup;

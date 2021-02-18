@@ -20,10 +20,11 @@ const AddQuestion = ({ addQuestion, history, instructionId }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
+    console.log('hello');
     e.preventDefault();
     const newQuestion = {
       ...formData,
-      instructionId: instructionId,
+      postId: instructionId,
     };
     addQuestion(newQuestion);
     setFormData({

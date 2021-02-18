@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addPost } from '../../actions/post';
 import { Link } from 'react-router-dom';
-import { editQuestion } from '../../actions/question';
+import { editQuestion, deleteQuestion } from '../../actions/question';
 
 const EditQuestion = ({
   prevQuestion,
   editQuestion,
+  deleteQuestion,
   history,
   instructionId,
   questionId,
@@ -29,6 +30,11 @@ const EditQuestion = ({
   const onSubmit = (e) => {
     e.preventDefault();
     editQuestion(formData, prevQuestion._id);
+    history.push(`/instructions/${instructionId}`);
+  };
+
+  const onDeleteQuestion = () => {
+    deleteQuestion(prevQuestion._id);
     history.push(`/instructions/${instructionId}`);
   };
 
@@ -112,7 +118,15 @@ const EditQuestion = ({
           >
             Cancel
           </Link>
-          <button className='btn teal lighten-1 z-depth-0'>Save</button>
+          <div>
+            <button className='btn teal lighten-1 z-depth-0 mr-30'>Save</button>
+            <button
+              onClick={onDeleteQuestion}
+              className='btn teal lighten-1 z-depth-0'
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -130,4 +144,6 @@ const mapStateToProps = (state, ownProps) => ({
   instructionId: ownProps.match.params.instructionId,
 });
 
-export default connect(mapStateToProps, { editQuestion })(EditQuestion);
+export default connect(mapStateToProps, { editQuestion, deleteQuestion })(
+  EditQuestion
+);

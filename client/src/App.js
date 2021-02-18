@@ -5,7 +5,7 @@ import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import Alert from './components/layout/Alert';
 import Dashboard from './components/dashboard/Dashboard';
-import Landing from './components/landing/Landing';
+import Landing from './components/student/Landing';
 import PrivateRoute from './components/routing/PrivateRoute';
 import InstructionDetail from './components/instructions/InstructionDetail';
 // Redux

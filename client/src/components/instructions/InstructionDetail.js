@@ -16,7 +16,7 @@ const InstructionDetail = ({
 }) => {
   useEffect(() => {
     getPostByID(postId);
-  }, [getPostByID]);
+  }, [getPostByID, postId]);
 
   const onAuthor = () => {
     if (isAuthenticated && user._id && user._id === post.user) {
